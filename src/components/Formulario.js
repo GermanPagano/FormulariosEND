@@ -179,20 +179,19 @@ const Formulario = () => {
 
   const generarWord = async () => {
     const plantillaURL = `${process.env.PUBLIC_URL}/templates/plantilla.docx`;
-    console.log('estoy por imprimir ', formData.resultadosImagen)
+    console.log("estoy por imprimir ", formData.resultadosImagen);
     try {
       const response = await fetch(plantillaURL);
       if (!response.ok) throw new Error("No se pudo cargar la plantilla");
       const content = await response.arrayBuffer();
       const zip = new PizZip(content);
       const doc = new Docxtemplater(zip, {
-        modules: [loadImageModule()], 
+        modules: [loadImageModule()],
         paragraphLoop: true,
         linebreaks: true,
         delimiters: { start: "{{", end: "}}" },
       });
 
-  
       // Renderizar los datos con renderAsync
       await doc.renderAsync({
         fecha: formatFecha(formData.fecha),
@@ -208,7 +207,9 @@ const Formulario = () => {
         informeNumero: formData.informeNumero || "N/A",
         liquidosPenetrantes: formData.tipoEnsayo.liquidosPenetrantes ? "█" : "",
         inspeccionVisual: formData.tipoEnsayo.inspeccionVisual ? "█" : "",
-        particulasMagneticas: formData.tipoEnsayo.particulasMagneticas ? "█" : "",
+        particulasMagneticas: formData.tipoEnsayo.particulasMagneticas
+          ? "█"
+          : "",
         corrientesInducidas: formData.tipoEnsayo.corrientesInducidas ? "█" : "",
         dureza: formData.tipoEnsayo.dureza ? "█" : "",
         boroscopia: formData.tipoEnsayo.boroscopia ? "█" : "",
@@ -247,8 +248,10 @@ const Formulario = () => {
         luzUltravioletaMedidor: formData.luces.ultravioleta.medidor || "N/A",
         luzUltravioletaModelo: formData.luces.ultravioleta.modelo || "N/A",
         luzUltravioletaSerie: formData.luces.ultravioleta.serie || "N/A",
-        luzUltravioletaVencimiento: formData.luces.ultravioleta.vencimiento || "N/A",
-        luzUltravioletaIntensidad: formData.luces.ultravioleta.intensidad || "N/A",
+        luzUltravioletaVencimiento:
+          formData.luces.ultravioleta.vencimiento || "N/A",
+        luzUltravioletaIntensidad:
+          formData.luces.ultravioleta.intensidad || "N/A",
         ambientalMedidor: formData.luces.ambiental.medidor || "N/A",
         ambientalModelo: formData.luces.ambiental.modelo || "N/A",
         ambientalSerie: formData.luces.ambiental.serie || "N/A",
@@ -259,60 +262,67 @@ const Formulario = () => {
         blancaSerie: formData.luces.blanca.serie || "N/A",
         blancaVencimiento: formData.luces.blanca.vencimiento || "N/A",
         blancaIntensidad: formData.luces.blanca.intensidad || "N/A",
-  
+
         // Equipamiento columna 1
         columna1Equipo: formData.equipamiento.columna1.equipo || "N/A",
         columna1Modelo: formData.equipamiento.columna1.modelo || "N/A",
         columna1Serie: formData.equipamiento.columna1.serie || "N/A",
-        columna1Vencimiento: formData.equipamiento.columna1.vencimiento || "N/A",
+        columna1Vencimiento:
+          formData.equipamiento.columna1.vencimiento || "N/A",
         columna1Frecuencia: formData.equipamiento.columna1.frecuencia || "N/A",
         columna1Ganancia: formData.equipamiento.columna1.ganancia || "N/A",
-  
+
         // Equipamiento columna 2
         columna2Equipo: formData.equipamiento.columna2.equipo || "N/A",
         columna2Modelo: formData.equipamiento.columna2.modelo || "N/A",
         columna2Serie: formData.equipamiento.columna2.serie || "N/A",
-        columna2Vencimiento: formData.equipamiento.columna2.vencimiento || "N/A",
+        columna2Vencimiento:
+          formData.equipamiento.columna2.vencimiento || "N/A",
         columna2Frecuencia: formData.equipamiento.columna2.frecuencia || "N/A",
         columna2Ganancia: formData.equipamiento.columna2.ganancia || "N/A",
-  
+
         // Equipamiento columna 3
         columna3Equipo: formData.equipamiento.columna3.equipo || "N/A",
         columna3Modelo: formData.equipamiento.columna3.modelo || "N/A",
         columna3Serie: formData.equipamiento.columna3.serie || "N/A",
-        columna3Vencimiento: formData.equipamiento.columna3.vencimiento || "N/A",
+        columna3Vencimiento:
+          formData.equipamiento.columna3.vencimiento || "N/A",
         columna3Frecuencia: formData.equipamiento.columna3.frecuencia || "N/A",
         columna3Ganancia: formData.equipamiento.columna3.ganancia || "N/A",
-  
+
         // Equipamiento columna 4
         columna4Equipo: formData.equipamiento.columna4.equipo || "N/A",
         columna4Modelo: formData.equipamiento.columna4.modelo || "N/A",
         columna4Serie: formData.equipamiento.columna4.serie || "N/A",
-        columna4Vencimiento: formData.equipamiento.columna4.vencimiento || "N/A",
+        columna4Vencimiento:
+          formData.equipamiento.columna4.vencimiento || "N/A",
         columna4Frecuencia: formData.equipamiento.columna4.frecuencia || "N/A",
         columna4Ganancia: formData.equipamiento.columna4.ganancia || "N/A",
-  
+
         // Equipamiento columna 5
         columna5Equipo: formData.equipamiento.columna5.equipo || "N/A",
         columna5Modelo: formData.equipamiento.columna5.modelo || "N/A",
         columna5Serie: formData.equipamiento.columna5.serie || "N/A",
-        columna5Vencimiento: formData.equipamiento.columna5.vencimiento || "N/A",
+        columna5Vencimiento:
+          formData.equipamiento.columna5.vencimiento || "N/A",
         columna5Frecuencia: formData.equipamiento.columna5.frecuencia || "N/A",
         columna5Ganancia: formData.equipamiento.columna5.ganancia || "N/A",
-  
+
         // Equipamiento columna 6
         columna6Equipo: formData.equipamiento.columna6.equipo || "N/A",
         columna6Modelo: formData.equipamiento.columna6.modelo || "N/A",
         columna6Serie: formData.equipamiento.columna6.serie || "N/A",
-        columna6Vencimiento: formData.equipamiento.columna6.vencimiento || "N/A",
+        columna6Vencimiento:
+          formData.equipamiento.columna6.vencimiento || "N/A",
         columna6Frecuencia: formData.equipamiento.columna6.frecuencia || "N/A",
         columna6Ganancia: formData.equipamiento.columna6.ganancia || "N/A",
-  
+
         // Equipamiento columna 7
         columna7Equipo: formData.equipamiento.columna7.equipo || "N/A",
         columna7Modelo: formData.equipamiento.columna7.modelo || "N/A",
         columna7Serie: formData.equipamiento.columna7.serie || "N/A",
-        columna7Vencimiento: formData.equipamiento.columna7.vencimiento || "N/A",
+        columna7Vencimiento:
+          formData.equipamiento.columna7.vencimiento || "N/A",
         columna7Frecuencia: formData.equipamiento.columna7.frecuencia || "N/A",
         columna7Ganancia: formData.equipamiento.columna7.ganancia || "N/A",
 
@@ -330,17 +340,17 @@ const Formulario = () => {
         img5: formData.imagendeltrabajo5 || "",
         img6: formData.imagendeltrabajo6 || "",
       });
-  
+
       const blob = doc.getZip().generate({
         type: "blob",
-        mimeType:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        mimeType:
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       });
       saveAs(blob, "informe.docx");
     } catch (error) {
       console.error("Error generando el documento:", error);
     }
   };
-  
 
   const renderTextareas = () => {
     return (
@@ -574,7 +584,7 @@ const Formulario = () => {
   //manejador para los datos de la zona de equipamiento 7 columnas
   const handleEquipamientoChange = (e, columnKey) => {
     const { name, value } = e.target;
-  
+
     setFormData((prev) => ({
       ...prev,
       equipamiento: {
@@ -586,11 +596,11 @@ const Formulario = () => {
       },
     }));
   };
-  
+
   //funcion que crea los input para la zona de equipamiento
   const renderEquipamientoForm = (columnKey, columnLabel) => {
     const equipamientoData = formData.equipamiento[columnKey] || {};
-  
+
     return (
       <div className="mb-3">
         <h3 className="text-center mb-4">{columnLabel}</h3>
@@ -662,9 +672,8 @@ const Formulario = () => {
       </div>
     );
   };
-  
 
-//funcion que renderiza el textarea de los resultados 
+  //funcion que renderiza el textarea de los resultados
   const renderTxtareasResultadoEnsayo = () => {
     return (
       <div className="mb-3">
@@ -683,170 +692,196 @@ const Formulario = () => {
     );
   };
 
-// cargar imagenes 
-const [imagen1Cargada, setImagen1Cargada] = useState(false); 
-const [imagen2Cargada, setImagen2Cargada] = useState(false); 
+  // cargar imagenes
+  const [imagen1Cargada, setImagen1Cargada] = useState(false);
+  const [imagen2Cargada, setImagen2Cargada] = useState(false);
 
-// Función para cargar una imagen y convertirla a base64
-const handleImageUpload = (e, imagenNumero) => {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setFormData((prev) => ({
-        ...prev,
-        [imagenNumero === 1 ? "resultadosImagen1" : "resultadosImagen2"]: reader.result, // Guarda la imagen correspondiente
-      }));
+  // Función para cargar una imagen y convertirla a base64
+  const handleImageUpload = (e, imagenNumero) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setFormData((prev) => ({
+          ...prev,
+          [imagenNumero === 1 ? "resultadosImagen1" : "resultadosImagen2"]:
+            reader.result, // Guarda la imagen correspondiente
+        }));
 
-      if (imagenNumero === 1) {
-        setImagen1Cargada(true);
-      } else {
-        setImagen2Cargada(true);
-      }
+        if (imagenNumero === 1) {
+          setImagen1Cargada(true);
+        } else {
+          setImagen2Cargada(true);
+        }
 
-      console.log(`Imagen ${imagenNumero} cargada:`, reader.result);
-    };
-    reader.onerror = (error) =>
-      console.error(`Error al cargar la imagen ${imagenNumero}`, error);
-  }
-};
-// Componente del Paso 23
-const Paso23 = () => (
-
-  <div className="form-container shadow p-4 rounded">   
-    <p className="text-center">Carga tablas de información como imagenes</p>  
-    <div style={{ border: "2px dashed #ccc", padding: "10px", textAlign: "center" }}>
-    <p className="text-center">Tabla 1</p>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => handleImageUpload(e, 1)}  // Llama a la función para cargar la imagen
-      />
-{imagen1Cargada && (
-          <div style={{ marginTop: "10px" }}>
-            <p style={{ color: "green", fontSize: "14px" }}>✔ Imagen 1 cargada</p>
-          </div>
-        )}
-    </div>
-
-    <div style={{ border: "2px dashed #ccc", padding: "10px", textAlign: "center" , marginTop: "20px"}}>
-    <p className="text-center">Tabla 2</p>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => handleImageUpload(e, 2)}  // Llama a la función para cargar la imagen
-      />
-
-    {imagen2Cargada && (
-          <div style={{ marginTop: "10px" }}>
-            <p style={{ color: "green", fontSize: "14px" }}>✔ Imagen 2 cargada</p>
-          </div>
-        )}
-
-</div>
-
-  </div>
-);
-const loadImageModule = () => {
-  return new ImageModule({
-    getImage: (tagValue) => {
-      if (!tagValue) {
-        throw new Error("No se ha proporcionado un valor para la imagen.");
-      }
-
-      // Validar si la imagen es base64 y tiene el formato correcto
-      if (!tagValue.startsWith("data:image/png;base64,") && !tagValue.startsWith("data:image/jpeg;base64,")) {
-        throw new Error("La imagen no tiene el formato base64 esperado.");
-      }
-
-      const base64Data = tagValue.split(",")[1]; // Elimina el prefijo 'data:image/png;base64,' o 'data:image/jpeg;base64,'
-
-      // Verificar que se haya podido convertir correctamente
-      if (!base64Data) {
-        throw new Error("La imagen no se pudo decodificar correctamente.");
-      }
-
-      return Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
-    },
-    getSize: (tagValue) => {
-      console.log("Procesando imagen:", tagValue);
-
-      if (!tagValue) {
-        return [0, 0]; // Retorna un tamaño de 0 si no hay imagen disponible
-      }
-
-      // Evaluar las condiciones solo si hay un valor de imagen
-      if (tagValue.includes("imagendeltrabajo")) {
-        return [800, 600]; // Tamaño específico para imágenes 'imagendeltrabajo'
-      } else if (tagValue.includes("otraimagen")) {
-        return [500, 400]; // Otro tamaño específico para 'otraimagen'
-      }
-
-      // Si no se cumplen las condiciones anteriores, retornamos el tamaño por defecto
-      return [720, 100];
+        console.log(`Imagen ${imagenNumero} cargada:`, reader.result);
+      };
+      reader.onerror = (error) =>
+        console.error(`Error al cargar la imagen ${imagenNumero}`, error);
     }
-  });
-};
-
-// Función para procesar y guardar las imágenes del trabajo
-const manejarCargaImagenTrabajo = (e, numeroImagen) => {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      // Actualizar formData con la imagen cargada
-      setFormData((prev) => ({
-        ...prev,
-        [`imagendeltrabajo${numeroImagen}`]: reader.result,
-      }));
-
-      // Actualizar el estado de las imágenes cargadas
-      setImagenesTrabajoCargadas((prev) => ({
-        ...prev,
-        [`imagen${numeroImagen}`]: true, // Indica que la imagen se cargó correctamente
-      }));
-
-      console.log(`Imagen del trabajo ${numeroImagen} cargada:`, reader.result);
-    };
-    reader.onerror = (error) =>
-      console.error(`Error al cargar la imagen del trabajo ${numeroImagen}`, error);
-  }
-};
-
-// Renderizar inputs para cargar las 6 imágenes del trabajo
-const renderizarInputsImagenTrabajo = () => {
-  return Array.from({ length: 6 }).map((_, index) => {
-    const numeroImagen = index + 1;
-    return (
-      <div key={numeroImagen} style={{ marginBottom: "10px" }}>
-        <label>Cargar imagen del trabajo {numeroImagen}</label>
+  };
+  // Componente del Paso 23
+  const Paso23 = () => (
+    <div className="form-container shadow p-4 rounded">
+      <p className="text-center">Carga tablas de información como imagenes</p>
+      <div
+        style={{
+          border: "2px dashed #ccc",
+          padding: "10px",
+          textAlign: "center",
+        }}
+      >
+        <p className="text-center">Tabla 1</p>
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => manejarCargaImagenTrabajo(e, numeroImagen)}
+          onChange={(e) => handleImageUpload(e, 1)} // Llama a la función para cargar la imagen
         />
-        {imagenesTrabajoCargadas[`imagen${numeroImagen}`] && (
-          <p style={{ color: "green", fontSize: "14px" }}>
-            ✔ Imagen del trabajo {numeroImagen} cargada
-          </p>
+        {imagen1Cargada && (
+          <div style={{ marginTop: "10px" }}>
+            <p style={{ color: "green", fontSize: "14px" }}>
+              ✔ Imagen 1 cargada
+            </p>
+          </div>
         )}
       </div>
-    );
+
+      <div
+        style={{
+          border: "2px dashed #ccc",
+          padding: "10px",
+          textAlign: "center",
+          marginTop: "20px",
+        }}
+      >
+        <p className="text-center">Tabla 2</p>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImageUpload(e, 2)} // Llama a la función para cargar la imagen
+        />
+
+        {imagen2Cargada && (
+          <div style={{ marginTop: "10px" }}>
+            <p style={{ color: "green", fontSize: "14px" }}>
+              ✔ Imagen 2 cargada
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+  const loadImageModule = () => {
+    return new ImageModule({
+      getImage: (tagValue) => {
+        if (!tagValue) {
+          throw new Error("No se ha proporcionado un valor para la imagen.");
+        }
+
+        // Validar si la imagen es base64 y tiene el formato correcto
+        if (
+          !tagValue.startsWith("data:image/png;base64,") &&
+          !tagValue.startsWith("data:image/jpeg;base64,")
+        ) {
+          throw new Error("La imagen no tiene el formato base64 esperado.");
+        }
+
+        const base64Data = tagValue.split(",")[1]; // Elimina el prefijo 'data:image/png;base64,' o 'data:image/jpeg;base64,'
+
+        // Verificar que se haya podido convertir correctamente
+        if (!base64Data) {
+          throw new Error("La imagen no se pudo decodificar correctamente.");
+        }
+
+        return Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
+      },
+      getSize: (img, tagValue, tagName) => {
+        // Explicacion de como tratar los elementos que recibe el modulo de imagenes:
+        // tagValue: este es el contenido base64 de la imagen
+        // tagName: este es el name del elemento imagen, este elemento es el que vamos a utilizar para determinar el tamaño de la imagen, esto lo definis en el renderAsync de este mismo archivo
+
+        // Aca vamos a loguear que incluye tagName para ver como esta cada elemento imagen
+        console.log("Procesando imagen:", tagName);
+        if (!tagValue) {
+          return [0, 0]; // Retorna un tamaño de 0 si no hay imagen disponible
+        }
+
+        // Evaluar las condiciones solo si hay un valor de imagen
+        if (tagName.includes("resultadosImagen")) {
+          return [720, 100]; // Tamaño específico para imágenes 'resultadosImagen'
+        } else if (tagName.includes("img")) {
+          return [500, 300]; // Otro tamaño específico para 'img' que son las ultimas 6 (segun tagname son img1, img2, img3, img4, img5, img6)
+        }
+
+        // Si no se cumplen las condiciones anteriores, retornamos el tamaño por defecto, le pongo 720x720
+        return [720, 720];
+      },
+    });
+  };
+
+  // Función para procesar y guardar las imágenes del trabajo
+  const manejarCargaImagenTrabajo = (e, numeroImagen) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        // Actualizar formData con la imagen cargada
+        setFormData((prev) => ({
+          ...prev,
+          [`imagendeltrabajo${numeroImagen}`]: reader.result,
+        }));
+
+        // Actualizar el estado de las imágenes cargadas
+        setImagenesTrabajoCargadas((prev) => ({
+          ...prev,
+          [`imagen${numeroImagen}`]: true, // Indica que la imagen se cargó correctamente
+        }));
+
+        console.log(
+          `Imagen del trabajo ${numeroImagen} cargada:`,
+          reader.result
+        );
+      };
+      reader.onerror = (error) =>
+        console.error(
+          `Error al cargar la imagen del trabajo ${numeroImagen}`,
+          error
+        );
+    }
+  };
+
+  // Renderizar inputs para cargar las 6 imágenes del trabajo
+  const renderizarInputsImagenTrabajo = () => {
+    return Array.from({ length: 6 }).map((_, index) => {
+      const numeroImagen = index + 1;
+      return (
+        <div key={numeroImagen} style={{ marginBottom: "10px" }}>
+          <label>Cargar imagen del trabajo {numeroImagen}</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => manejarCargaImagenTrabajo(e, numeroImagen)}
+          />
+          {imagenesTrabajoCargadas[`imagen${numeroImagen}`] && (
+            <p style={{ color: "green", fontSize: "14px" }}>
+              ✔ Imagen del trabajo {numeroImagen} cargada
+            </p>
+          )}
+        </div>
+      );
+    });
+  };
+
+  const [imagenesTrabajoCargadas, setImagenesTrabajoCargadas] = useState({
+    imagen1: false,
+    imagen2: false,
+    imagen3: false,
+    imagen4: false,
+    imagen5: false,
+    imagen6: false,
   });
-};
-
-
-const [imagenesTrabajoCargadas, setImagenesTrabajoCargadas] = useState({
-  imagen1: false,
-  imagen2: false,
-  imagen3: false,
-  imagen4: false,
-  imagen5: false,
-  imagen6: false,
-});
-
 
   const renderStep = () => {
     switch (step) {
@@ -1326,7 +1361,7 @@ const [imagenesTrabajoCargadas, setImagenesTrabajoCargadas] = useState({
           </div>
         );
 
-        case 17:
+      case 17:
         return (
           <div className="form-container shadow p-4 rounded">
             <h3 className="text-center mb-4">Equipamiento - Columna 2/7</h3>
@@ -1349,166 +1384,166 @@ const [imagenesTrabajoCargadas, setImagenesTrabajoCargadas] = useState({
           </div>
         );
 
-        case 18:
-          return (
-            <div className="form-container shadow p-4 rounded">
-              <h3 className="text-center mb-4">Equipamiento - Columna 3/7</h3>
-              <h6 className="text-center mb-4">18</h6>
-              {renderEquipamientoForm("columna3", "Columna 3")}
-              <button
-                type="button"
-                className="btn btn-secondary w-100 mb-2"
-                onClick={prevStep}
-              >
-                Atrás
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary w-100 mb-2"
-                onClick={nextStep}
-              >
-                Continuar
-              </button>
-            </div>
-          );
+      case 18:
+        return (
+          <div className="form-container shadow p-4 rounded">
+            <h3 className="text-center mb-4">Equipamiento - Columna 3/7</h3>
+            <h6 className="text-center mb-4">18</h6>
+            {renderEquipamientoForm("columna3", "Columna 3")}
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary w-100 mb-2"
+              onClick={nextStep}
+            >
+              Continuar
+            </button>
+          </div>
+        );
 
-          case 19:
-            return (
-              <div className="form-container shadow p-4 rounded">
-                <h3 className="text-center mb-4">Equipamiento - Columna 4/7</h3>
-                <h6 className="text-center mb-4">19</h6>
-                {renderEquipamientoForm("columna4", "Columna 4")}
-                <button
-                  type="button"
-                  className="btn btn-secondary w-100 mb-2"
-                  onClick={prevStep}
-                >
-                  Atrás
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary w-100 mb-2"
-                  onClick={nextStep}
-                >
-                  Continuar
-                </button>
-              </div>
-            );
+      case 19:
+        return (
+          <div className="form-container shadow p-4 rounded">
+            <h3 className="text-center mb-4">Equipamiento - Columna 4/7</h3>
+            <h6 className="text-center mb-4">19</h6>
+            {renderEquipamientoForm("columna4", "Columna 4")}
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary w-100 mb-2"
+              onClick={nextStep}
+            >
+              Continuar
+            </button>
+          </div>
+        );
 
-            case 20:
-              return (
-                <div className="form-container shadow p-4 rounded">
-                  <h3 className="text-center mb-4">Equipamiento - Columna 5/7</h3>
-                  <h6 className="text-center mb-4">20</h6>
-                  {renderEquipamientoForm("columna5", "Columna 5")}
-                  <button
-                    type="button"
-                    className="btn btn-secondary w-100 mb-2"
-                    onClick={prevStep}
-                  >
-                    Atrás
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary w-100 mb-2"
-                    onClick={nextStep}
-                  >
-                    Continuar
-                  </button>
-                </div>
-              );
-              case 21:
-                return (
-                  <div className="form-container shadow p-4 rounded">
-                    <h3 className="text-center mb-4">Equipamiento - Columna 6/7</h3>
-                    <h6 className="text-center mb-4">21</h6>
-                    {renderEquipamientoForm("columna6", "Columna 6")}
-                    <button
-                      type="button"
-                      className="btn btn-secondary w-100 mb-2"
-                      onClick={prevStep}
-                    >
-                      Atrás
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary w-100 mb-2"
-                      onClick={nextStep}
-                    >
-                      Continuar
-                    </button>
-                  </div>
-                );
-                case 22:
-                  return (
-                    <div className="form-container shadow p-4 rounded">
-                      <h3 className="text-center mb-4">Equipamiento - Columna 7/7</h3>
-                      <h6 className="text-center mb-4">22</h6>
-                      {renderEquipamientoForm("columna7", "Columna 7")}
-                      <button
-                        type="button"
-                        className="btn btn-secondary w-100 mb-2"
-                        onClick={prevStep}
-                      >
-                        Atrás
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary w-100 mb-2"
-                        onClick={nextStep}
-                      >
-                        Continuar
-                      </button>
-                    </div>
-                  );
-  
-                  case 23:
-                    return (
-                      <div className="form-container shadow p-4 rounded">
-                        <h3 className="text-center mb-4">Resultados del Ensayo</h3>
-                        <h6 className="text-center mb-4">23</h6>
-                        {renderTxtareasResultadoEnsayo()}
-                        <Paso23 />
-                        <button
-                          type="button"
-                          className="btn btn-secondary w-100 mb-2"
-                          onClick={prevStep}
-                        >
-                          Atrás
-                        </button>
-                        <button
-                      type="button"
-                      className="btn btn-primary w-100 mb-2"
-                      onClick={nextStep}
-                    >
-                      Continuar
-                    </button>
-                      </div>
-                    );
-                    case 24:
-                      return (
-                        <div className="form-container shadow p-4 rounded">
-                        <p className="text-center">Carga imágenes del trabajo (6 en total)</p>
-                        {renderizarInputsImagenTrabajo()}
-                      
-                          <button
-                            type="button"
-                            className="btn btn-secondary w-100 mb-2"
-                            onClick={prevStep}
-                          >
-                            Atrás
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-success w-100"
-                            onClick={generarWord}
-                          >
-                            Generar Word
-                          </button>
-                    </div>
-                      );
-                  
+      case 20:
+        return (
+          <div className="form-container shadow p-4 rounded">
+            <h3 className="text-center mb-4">Equipamiento - Columna 5/7</h3>
+            <h6 className="text-center mb-4">20</h6>
+            {renderEquipamientoForm("columna5", "Columna 5")}
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary w-100 mb-2"
+              onClick={nextStep}
+            >
+              Continuar
+            </button>
+          </div>
+        );
+      case 21:
+        return (
+          <div className="form-container shadow p-4 rounded">
+            <h3 className="text-center mb-4">Equipamiento - Columna 6/7</h3>
+            <h6 className="text-center mb-4">21</h6>
+            {renderEquipamientoForm("columna6", "Columna 6")}
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary w-100 mb-2"
+              onClick={nextStep}
+            >
+              Continuar
+            </button>
+          </div>
+        );
+      case 22:
+        return (
+          <div className="form-container shadow p-4 rounded">
+            <h3 className="text-center mb-4">Equipamiento - Columna 7/7</h3>
+            <h6 className="text-center mb-4">22</h6>
+            {renderEquipamientoForm("columna7", "Columna 7")}
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary w-100 mb-2"
+              onClick={nextStep}
+            >
+              Continuar
+            </button>
+          </div>
+        );
 
+      case 23:
+        return (
+          <div className="form-container shadow p-4 rounded">
+            <h3 className="text-center mb-4">Resultados del Ensayo</h3>
+            <h6 className="text-center mb-4">23</h6>
+            {renderTxtareasResultadoEnsayo()}
+            <Paso23 />
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary w-100 mb-2"
+              onClick={nextStep}
+            >
+              Continuar
+            </button>
+          </div>
+        );
+      case 24:
+        return (
+          <div className="form-container shadow p-4 rounded">
+            <p className="text-center">
+              Carga imágenes del trabajo (6 en total)
+            </p>
+            {renderizarInputsImagenTrabajo()}
+
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="btn btn-success w-100"
+              onClick={generarWord}
+            >
+              Generar Word
+            </button>
+          </div>
+        );
 
       default:
         return null;
