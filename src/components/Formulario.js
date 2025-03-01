@@ -5,7 +5,7 @@ import { saveAs } from "file-saver";
 import ImageModule from "docxtemplater-image-module-free";
 
 const Formulario = () => {
-  const [step, setStep] = useState(1); // Control del paso actual
+  const [step, setStep] = useState(0); // Control del paso actual
 
   const obtenerFechaLocal = () => {
     const fecha = new Date();
@@ -15,6 +15,8 @@ const Formulario = () => {
     return `${año}-${mes}-${dia}`;
   };
   const [formData, setFormData] = useState({
+    operador: { nombre: "", matricula: "", firma: "" },
+    inspector: { nombre: "", matricula: "", firma: "" },
     fecha: obtenerFechaLocal(), // Fecha por defecto
     facilitadoA: "",
     direccion: "",
@@ -139,34 +141,36 @@ const Formulario = () => {
     imagendeltrabajo5: "",
     imagendeltrabajo6: "",
   });
-
   const handleChange = (e, materialKey = null) => {
     const { name, type, value, checked } = e.target;
-    if (materialKey) {
-      setFormData((prev) => ({
-        ...prev,
-        materiales: {
-          ...prev.materiales,
-          [materialKey]: {
-            ...prev.materiales[materialKey],
-            [name]: value,
+
+    setFormData((prev) => {
+      if (materialKey) {
+        return {
+          ...prev,
+          materiales: {
+            ...prev.materiales,
+            [materialKey]: {
+              ...prev.materiales[materialKey],
+              [name]: value,
+            },
           },
-        },
-      }));
-    } else if (type === "checkbox") {
-      setFormData((prev) => ({
-        ...prev,
-        tipoEnsayo: {
-          ...prev.tipoEnsayo,
-          [name]: checked,
-        },
-      }));
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+        };
+      } else if (type === "checkbox") {
+        return {
+          ...prev,
+          tipoEnsayo: {
+            ...prev.tipoEnsayo,
+            [name]: checked,
+          },
+        };
+      } else {
+        return {
+          ...prev,
+          [name]: value,
+        };
+      }
+    });
   };
 
   const formatFecha = (fecha) => {
@@ -191,6 +195,19 @@ const Formulario = () => {
         linebreaks: true,
         delimiters: { start: "{{", end: "}}" },
       });
+
+      // Convertir imágenes de firma a base64
+      const firmaOperadorBase64 = formData.operador?.firma
+        ? await convertirImagenABase64(
+            `${process.env.PUBLIC_URL}/public/sellos/${formData.operador.firma}`
+          )
+        : "";
+
+      const firmaInspectorBase64 = formData.inspector?.firma
+        ? await convertirImagenABase64(
+            `${process.env.PUBLIC_URL}/public/sellos/${formData.inspector.firma}`
+          )
+        : "";
 
       // Renderizar los datos con renderAsync
       await doc.renderAsync({
@@ -339,6 +356,11 @@ const Formulario = () => {
         img4: formData.imagendeltrabajo4 || "",
         img5: formData.imagendeltrabajo5 || "",
         img6: formData.imagendeltrabajo6 || "",
+
+        operador: formData.operador?.nombre || "N/A",
+        firmaOperador: formData.operador?.firma,
+        inspector: formData.inspector?.nombre || "N/A",
+        firmaInspector: formData.operador?.firma,
       });
 
       const blob = doc.getZip().generate({
@@ -815,7 +837,7 @@ const Formulario = () => {
         }
 
         // Si no se cumplen las condiciones anteriores, retornamos el tamaño por defecto, le pongo 720x720
-        return [720, 720];
+        return [40, 40];
       },
     });
   };
@@ -839,10 +861,7 @@ const Formulario = () => {
           [`imagen${numeroImagen}`]: true, // Indica que la imagen se cargó correctamente
         }));
 
-        console.log(
-          `Imagen del trabajo ${numeroImagen} cargada:`,
-          reader.result
-        );
+      
       };
       reader.onerror = (error) =>
         console.error(
@@ -883,8 +902,148 @@ const Formulario = () => {
     imagen6: false,
   });
 
+  //convertir las imagenes de los sellos en base64
+  const convertirImagenABase64 = (url, callback) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Evita problemas de CORS
+    img.src = url;
+  
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      
+      const base64 = canvas.toDataURL("image/png"); // Convierte la imagen
+      callback(base64);
+    };
+  
+    img.onerror = (err) => {
+      console.error("Error cargando la imagen:", err);
+    };
+  };
+  
+
+
+  const operadores = [
+    {
+      nombre: "Pagano German",
+      matricula: "123456",
+      firma: "/sellos/pagano.png",
+    },
+    {
+      nombre: "Gil Cristian",
+      matricula: "654321",
+      firma: "/sellos/pagano.png",
+    },
+  ];
+
+  const inspectores = [
+    {
+      nombre: "Pagano German",
+      matricula: "123456",
+      firma: "/sellos/pagano.png",
+    },
+    {
+      nombre: "Gil Cristian",
+      matricula: "654321",
+      firma: "/sellos/pagano.png",
+    },
+  ];
+
+
+  const handleOperadorChange = (e) => {
+    const selectedOperador = operadores.find((op) => op.nombre === e.target.value);
+  
+    if (selectedOperador) {
+      convertirImagenABase64(selectedOperador.firma, (base64) => {
+        setFormData((prev) => ({
+          ...prev,
+          operador: { ...selectedOperador, firma: base64 },
+        }));
+      });
+    }
+  };
+  
+  const handleInspectorChange = (e) => {
+    const selectedInspector = inspectores.find((ins) => ins.nombre === e.target.value);
+  
+    if (selectedInspector) {
+      convertirImagenABase64(selectedInspector.firma, (firmaBase64) => {
+        setFormData((prev) => ({
+          ...prev,
+          inspector: { ...selectedInspector, firma: firmaBase64 },
+        }));
+      });
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        inspector: { nombre: "", matricula: "", firma: "" },
+      }));
+    }
+  };
+  
+  
+  
+  const renderOptions = (items) => {
+    return (
+      <>
+        <option value="">Seleccionar...</option>
+        {items?.map((item, index) => (
+          <option key={index} value={item.nombre}>
+            {item.nombre}
+          </option>
+        ))}
+      </>
+    );
+  };
+  
+
   const renderStep = () => {
     switch (step) {
+      case 0:
+  return (
+    <div className="form-container shadow p-4 rounded">
+      <h3 className="text-center mb-4">Elegir opción</h3>
+
+      {/* Selector de Operador */}
+      <div className="mb-3">
+        <label className="form-label">Operador</label>
+        <select
+          className="form-control"
+          name="operador"
+          value={formData.operador?.nombre || ""}
+          onChange={handleOperadorChange}
+        >
+          {renderOptions(operadores)}
+        </select>
+      </div>
+
+      {/* Selector de Inspector */}
+      <div className="mb-3">
+        <label className="form-label">Inspector</label>
+        <select
+          className="form-control"
+          name="inspector"
+          value={formData.inspector?.nombre || ""}
+          onChange={handleInspectorChange}
+        >
+          {renderOptions(inspectores)}
+        </select>
+      </div>
+
+      <button
+        type="button"
+        className="btn btn-primary w-100"
+        onClick={nextStep}
+      >
+        Completar Formulario
+      </button>
+    </div>
+  );
+
+
       case 1:
         return (
           <div className="form-container shadow p-4 rounded">
@@ -944,6 +1103,13 @@ const Formulario = () => {
                 onChange={handleChange}
               />
             </div>
+            <button
+              type="button"
+              className="btn btn-secondary w-100 mb-2"
+              onClick={prevStep}
+            >
+              Atrás
+            </button>
             <button
               type="button"
               className="btn btn-primary w-100"
