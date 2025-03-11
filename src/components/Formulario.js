@@ -360,7 +360,7 @@ const Formulario = () => {
         operador: formData.operador?.nombre || "N/A",
         firmaOperador: formData.operador?.firma,
         inspector: formData.inspector?.nombre || "N/A",
-        firmaInspector: formData.operador?.firma,
+        firmaInspector: formData.inspector?.firma,
       });
 
       const blob = doc.getZip().generate({
@@ -928,28 +928,42 @@ const Formulario = () => {
 
   const operadores = [
     {
-      nombre: "Pagano German",
-      matricula: "123456",
-      firma: "/sellos/pagano.png",
-    },
-    {
-      nombre: "Gil Cristian",
-      matricula: "654321",
-      firma: "/sellos/pagano.png",
-    },
+      id: 1,
+      nombre: "M. De Bernardo",
+      nivel: "2",
+      infoRara: "EV-LP-PM-CI-US.-",
+      norma:"IRAM ISO 9712.-",
+      firma: "/sellos/operadores/1.png",
+    }
+    
   ];
 
   const inspectores = [
     {
-      nombre: "Pagano German",
-      matricula: "123456",
-      firma: "/sellos/pagano.png",
+      id: 1,
+      nombre: "D.Serrano",
+      nivel: "2",
+      cargo: "REPRESENTANTE TECNICO",
+      norma: "IRAM ISO 9712.-",
+      firma: "/sellos/inspectores/1.png",
     },
     {
-      nombre: "Gil Cristian",
-      matricula: "654321",
-      firma: "/sellos/pagano.png",
+      id: 2,
+      nombre: "F.Campos",
+      nivel: "2",
+      infoRara: "LP-PM-CI-US.-",
+      norma: "IRAM ISO 9712.-",
+      firma: "/sellos/inspectores/2.png",
     },
+    {
+      id: 3,
+      nombre: "P.Ducculi",
+      nivel: "2",
+      infoRara: "LP.-",
+      norma: "IRAM ISO 9712.-",
+      firma: "/sellos/inspectores/3.png",
+    },
+    
   ];
 
 
