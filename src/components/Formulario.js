@@ -132,14 +132,29 @@ const Formulario = () => {
       },
     },
     txtRdoEnsayo: "",
-    resultadosImagen1: "",
-    resultadosImagen2: "",
-    imagendeltrabajo1: "",
-    imagendeltrabajo2: "",
-    imagendeltrabajo3: "",
-    imagendeltrabajo4: "",
-    imagendeltrabajo5: "",
-    imagendeltrabajo6: "",
+    resultadosImagen1: "--",
+    resultadosImagen2: "--",
+    //fotos
+    imagendeltrabajo1: "--",
+    imagendeltrabajo2: "--",
+    imagendeltrabajo3: "--",
+    imagendeltrabajo4: "--",
+    imagendeltrabajo5: "--",
+    imagendeltrabajo6: "--",
+    imagendeltrabajo7: "--",
+  imagendeltrabajo8: "--",
+  imagendeltrabajo9: "--",
+  imagendeltrabajo10: "--",
+  imagendeltrabajo11: "--",
+  imagendeltrabajo12: "--",
+  imagendeltrabajo13: "--",
+  imagendeltrabajo14: "--",
+  imagendeltrabajo15: "--",
+  imagendeltrabajo16: "--",
+  imagendeltrabajo17: "--",
+  imagendeltrabajo18: "--",
+  imagendeltrabajo19: "--",
+  imagendeltrabajo20: "--",
   });
   const handleChange = (e, materialKey = null) => {
     const { name, type, value, checked } = e.target;
@@ -195,19 +210,6 @@ const Formulario = () => {
         linebreaks: true,
         delimiters: { start: "{{", end: "}}" },
       });
-
-      // Convertir imágenes de firma a base64
-      const firmaOperadorBase64 = formData.operador?.firma
-        ? await convertirImagenABase64(
-            `${process.env.PUBLIC_URL}/public/sellos/${formData.operador.firma}`
-          )
-        : "";
-
-      const firmaInspectorBase64 = formData.inspector?.firma
-        ? await convertirImagenABase64(
-            `${process.env.PUBLIC_URL}/public/sellos/${formData.inspector.firma}`
-          )
-        : "";
 
       // Renderizar los datos con renderAsync
       await doc.renderAsync({
@@ -351,11 +353,25 @@ const Formulario = () => {
 
         //IMAGENES DE SEGUNDA PAGINA
         img1: formData.imagendeltrabajo1 || "",
-        img2: formData.imagendeltrabajo2 || "",
-        img3: formData.imagendeltrabajo3 || "",
-        img4: formData.imagendeltrabajo4 || "",
-        img5: formData.imagendeltrabajo5 || "",
-        img6: formData.imagendeltrabajo6 || "",
+  img2: formData.imagendeltrabajo2 || "",
+  img3: formData.imagendeltrabajo3 || "",
+  img4: formData.imagendeltrabajo4 || "",
+  img5: formData.imagendeltrabajo5 || "",
+  img6: formData.imagendeltrabajo6 || "",
+  img7: formData.imagendeltrabajo7 || "",
+  img8: formData.imagendeltrabajo8 || "",
+  img9: formData.imagendeltrabajo9 || "",
+  img10: formData.imagendeltrabajo10 || "",
+  img11: formData.imagendeltrabajo11 || "",
+  img12: formData.imagendeltrabajo12 || "",
+  img13: formData.imagendeltrabajo13 || "",
+  img14: formData.imagendeltrabajo14 || "",
+  img15: formData.imagendeltrabajo15 || "",
+  img16: formData.imagendeltrabajo16 || "",
+  img17: formData.imagendeltrabajo17 || "",
+  img18: formData.imagendeltrabajo18 || "",
+  img19: formData.imagendeltrabajo19 || "",
+  img20: formData.imagendeltrabajo20 || "",
 
         operador: formData.operador?.nombre || "N/A",
         firmaOperador: formData.operador?.firma,
@@ -373,6 +389,7 @@ const Formulario = () => {
       console.error("Error generando el documento:", error);
     }
   };
+
 
   const renderTextareas = () => {
     return (
@@ -797,110 +814,121 @@ const Formulario = () => {
   const loadImageModule = () => {
     return new ImageModule({
       getImage: (tagValue) => {
-        if (!tagValue) {
-          throw new Error("No se ha proporcionado un valor para la imagen.");
+        console.log("getImage - tagValue:", tagValue);
+        
+        // Manejar todos los casos no válidos
+        if (!tagValue || tagValue === "" || tagValue === "--") {
+          console.log("Imagen vacía o no definida, retornando null");
+          return null;
         }
-
-        // Validar si la imagen es base64 y tiene el formato correcto
+  
+        // Verificar que sea un formato base64 válido
         if (
           !tagValue.startsWith("data:image/png;base64,") &&
           !tagValue.startsWith("data:image/jpeg;base64,")
         ) {
-          throw new Error("La imagen no tiene el formato base64 esperado.");
+          console.warn("Formato de imagen no válido, se omitirá:", tagValue);
+          return null;
         }
-
-        const base64Data = tagValue.split(",")[1]; // Elimina el prefijo 'data:image/png;base64,' o 'data:image/jpeg;base64,'
-
-        // Verificar que se haya podido convertir correctamente
+  
+        // Extraer datos base64
+        const base64Data = tagValue.split(",")[1];
         if (!base64Data) {
-          throw new Error("La imagen no se pudo decodificar correctamente.");
+          console.warn("No se encontraron datos base64 válidos, se omitirá:", tagValue);
+          return null;
         }
-
-        return Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
+  
+        // Intentar decodificar y convertir a Uint8Array
+        try {
+          const decodedData = atob(base64Data);
+          const imageData = Uint8Array.from(decodedData, (c) => c.charCodeAt(0));
+          console.log("Imagen procesada correctamente, longitud:", imageData.length);
+          return imageData;
+        } catch (error) {
+          console.error("Error al decodificar la imagen:", error, "tagValue:", tagValue);
+          return null;
+        }
       },
       getSize: (img, tagValue, tagName) => {
-        // Explicacion de como tratar los elementos que recibe el modulo de imagenes:
-        // tagValue: este es el contenido base64 de la imagen
-        // tagName: este es el name del elemento imagen, este elemento es el que vamos a utilizar para determinar el tamaño de la imagen, esto lo definis en el renderAsync de este mismo archivo
-
-        // Aca vamos a loguear que incluye tagName para ver como esta cada elemento imagen
-        console.log("Procesando imagen:", tagName);
-        if (!tagValue) {
-          return [0, 0]; // Retorna un tamaño de 0 si no hay imagen disponible
+        console.log("getSize - tagName:", tagName, "tagValue:", tagValue, "img:", img);
+        
+        // Si no hay imagen válida, devolver tamaño 0
+        if (!img || !tagValue || tagValue === "" || tagValue === "--") {
+          console.log("No hay imagen válida para dimensionar, retornando [0, 0]");
+          return [0, 0];
         }
-
-        // Evaluar las condiciones solo si hay un valor de imagen
+  
+        // Dimensiones según el tipo de marcador
         if (tagName.includes("resultadosImagen")) {
-          return [720, 100]; // Tamaño específico para imágenes 'resultadosImagen'
+          return [720, 100];
         } else if (tagName.includes("img")) {
-          return [500, 300]; // Otro tamaño específico para 'img' que son las ultimas 6 (segun tagname son img1, img2, img3, img4, img5, img6)
+          return [500, 300];
         }
-
-        // Si no se cumplen las condiciones anteriores, retornamos el tamaño por defecto, le pongo 720x720
+  
         return [40, 40];
       },
     });
   };
 
-  // Función para procesar y guardar las imágenes del trabajo
-  const manejarCargaImagenTrabajo = (e, numeroImagen) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        // Actualizar formData con la imagen cargada
-        setFormData((prev) => ({
-          ...prev,
-          [`imagendeltrabajo${numeroImagen}`]: reader.result,
-        }));
-
-        // Actualizar el estado de las imágenes cargadas
-        setImagenesTrabajoCargadas((prev) => ({
-          ...prev,
-          [`imagen${numeroImagen}`]: true, // Indica que la imagen se cargó correctamente
-        }));
-
-      
-      };
-      reader.onerror = (error) =>
-        console.error(
-          `Error al cargar la imagen del trabajo ${numeroImagen}`,
-          error
-        );
-    }
-  };
-
-  // Renderizar inputs para cargar las 6 imágenes del trabajo
-  const renderizarInputsImagenTrabajo = () => {
-    return Array.from({ length: 6 }).map((_, index) => {
-      const numeroImagen = index + 1;
-      return (
-        <div key={numeroImagen} style={{ marginBottom: "10px" }}>
-          <label>Cargar imagen del trabajo {numeroImagen}</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => manejarCargaImagenTrabajo(e, numeroImagen)}
-          />
-          {imagenesTrabajoCargadas[`imagen${numeroImagen}`] && (
-            <p style={{ color: "green", fontSize: "14px" }}>
-              ✔ Imagen del trabajo {numeroImagen} cargada
-            </p>
-          )}
-        </div>
+// Modificar la función manejarCargaImagenTrabajo para que sea más genérica
+const manejarCargaImagenTrabajo = (e, numeroImagen) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setFormData((prev) => ({
+        ...prev,
+        [`imagendeltrabajo${numeroImagen}`]: reader.result,
+      }));
+      setImagenesTrabajoCargadas((prev) => ({
+        ...prev,
+        [`imagen${numeroImagen}`]: true,
+      }));
+    };
+    reader.onerror = (error) =>
+      console.error(
+        `Error al cargar la imagen del trabajo ${numeroImagen}`,
+        error
       );
-    });
-  };
-
-  const [imagenesTrabajoCargadas, setImagenesTrabajoCargadas] = useState({
-    imagen1: false,
-    imagen2: false,
-    imagen3: false,
-    imagen4: false,
-    imagen5: false,
-    imagen6: false,
+  }
+};
+// Nueva función para agregar un nuevo input de imagen
+const agregarInputImagen = () => {
+  if (cantidadImagenes < 20) {
+    setCantidadImagenes((prev) => prev + 1);
+  }
+};
+// Modificar la función de renderizado de inputs
+const renderizarInputsImagenTrabajo = () => {
+  return Array.from({ length: cantidadImagenes }).map((_, index) => {
+    const numeroImagen = index + 1;
+    return (
+      <div key={numeroImagen} style={{ marginBottom: "10px" }}>
+        <label>Cargar imagen del trabajo {numeroImagen}</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => manejarCargaImagenTrabajo(e, numeroImagen)}
+        />
+        {imagenesTrabajoCargadas[`imagen${numeroImagen}`] && (
+          <p style={{ color: "green", fontSize: "14px" }}>
+            ✔ Imagen del trabajo {numeroImagen} cargada
+          </p>
+        )}
+      </div>
+    );
   });
+};
+const [imagenesTrabajoCargadas, setImagenesTrabajoCargadas] = useState(() => {
+  const initialState = {};
+  for (let i = 0; i <= 20; i++) {
+    initialState[`imagen${i}`] = false;
+  }
+  return initialState;
+});
+// Agregar este estado al inicio del componente junto con los otros useState
+const [cantidadImagenes, setCantidadImagenes] = useState(1); // Comienza con 1 input
 
   //convertir las imagenes de los sellos en base64
   const convertirImagenABase64 = (url, callback) => {
@@ -1700,30 +1728,40 @@ const Formulario = () => {
             </button>
           </div>
         );
-      case 24:
-        return (
-          <div className="form-container shadow p-4 rounded">
-            <p className="text-center">
-              Carga imágenes del trabajo (6 en total)
-            </p>
-            {renderizarInputsImagenTrabajo()}
-
-            <button
-              type="button"
-              className="btn btn-secondary w-100 mb-2"
-              onClick={prevStep}
-            >
-              Atrás
-            </button>
-            <button
-              type="button"
-              className="btn btn-success w-100"
-              onClick={generarWord}
-            >
-              Generar Word
-            </button>
-          </div>
-        );
+        case 24:
+          return (
+            <div className="form-container shadow p-4 rounded">
+              <p className="text-center">
+                Carga imágenes del trabajo (máximo 20)
+              </p>
+              {renderizarInputsImagenTrabajo()}
+              
+              {/* Botón para agregar más inputs */}
+              <button
+                type="button"
+                className="btn btn-outline-primary w-100 mb-2"
+                onClick={agregarInputImagen}
+                disabled={cantidadImagenes >= 20}
+              >
+                + Agregar otra imagen
+              </button>
+        
+              <button
+                type="button"
+                className="btn btn-secondary w-100 mb-2"
+                onClick={prevStep}
+              >
+                Atrás
+              </button>
+              <button
+                type="button"
+                className="btn btn-success w-100"
+                onClick={generarWord}
+              >
+                Generar Word
+              </button>
+            </div>
+          );
 
       default:
         return null;
